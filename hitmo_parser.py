@@ -5,25 +5,27 @@ from bs4 import BeautifulSoup
 class HitmoParser:
     main_link = r"https://rus.hitmotop.com/"
 
-    @staticmethod
-    def find_song(song_name: str):
+    def __init__(self):
+        self.res_link = self.main_link
+        self.track_list = []
+
+    def find_song(self, song_name: str):
         """
         gets song name
         returns link for find this song
         """
-        res_link = HitmoParser.main_link + "+".join(song_name.split())
-        return res_link
+        self.res_link = HitmoParser.main_link + "+".join(song_name.split())
+        return self.res_link
 
-    @staticmethod
-    def get_songs(link):
+    def get_songs(self, link):
         """
         gets link on site
         returns songs info (artist, name, duration, download_link)
         """
+        self.track_list = []
         r = requests.get(link)
         bs = BeautifulSoup(r.text, features="html.parser")
         tracks = bs.find_all("li", {"class": "tracks__item"})
-        tracks_list = []
         for track in tracks:
             track_title = track.find("div", {"class": "track__title"}).text.strip()
             track_artist = track.find("div", {"class": "track__desc"}).text
@@ -36,5 +38,5 @@ class HitmoParser:
                 "length": track_length,
                 "download_link": track_download_link
             }
-            tracks_list.append(track_info)
-        return tracks_list
+            self.track_list.append(track_info)
+        return self.track_list

@@ -14,7 +14,7 @@ class HitmoParser:
         gets song name
         returns link for find this song
         """
-        self.res_link = HitmoParser.main_link + "+".join(song_name.split())
+        self.res_link = HitmoParser.main_link + "search?q=" + "+".join(song_name.split())
         return self.res_link
 
     def get_songs(self, link):
